@@ -1,28 +1,33 @@
 import React from 'react'
 import JsonData from './data.json'
   export default function Table_Display(){
-    
-      const data =JsonData;
-      let dataArr = Array.from(data);
 
-   
+
+        
      
-      const DisplayData=dataArr.map((infos) =>{
+
+    
+      const datas=JsonData;
+      const DisplayData=Object.keys(datas).map((info,key) =>{
+
                 return(
-                    infos.map((info) => {
-                        return(
-                    <tr>
-                        <td>{info.name}</td>
-                        <td>{info.iso.code}</td>
-                        <td>{info.symbol.native.display}</td>
+
+                       <>     
+                    <tr  key={key}>
+                      <td>{datas[info].name}</td>
+                      <td>{datas[info].iso.code}</td>
+                        <td>{datas[info].units.name}</td>
+                       
                     </tr>
-                        )})
+                    </>
+                    
+
+                   
                 )
             }
         
         
-      );
- 
+      )
          
         
       
@@ -34,11 +39,13 @@ import JsonData from './data.json'
                     <th>Currency Name</th>
                     <th>Currency Code</th>
                     <th>Currency Display </th>
+                    <th>Currency Display Name </th>
+
                     </tr>
                 </thead>
                 <tbody>
                     
-                    {DisplayData}
+                {DisplayData}        
                     
                 </tbody>
             </table>
