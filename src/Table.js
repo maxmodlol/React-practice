@@ -12,14 +12,16 @@ import JsonData from './data.json'
 
                 return(
 
-                       <>     
-                    <tr  key={key}>
-                      <td>{datas[info].name}</td>
-                      <td>{datas[info].iso.code}</td>
-                        <td>{datas[info].units.name}</td>
+                           
+                <tr  key={key}>
+                    <td>{datas[info].name}</td>
+                    <td>{datas[info].iso.code}</td>
+                    <td>{datas[info].symbol.default.display}</td>
+                    <td>{datas[info].units.name.major}</td>
+
                        
-                    </tr>
-                    </>
+                </tr>
+                
                     
 
                    
@@ -33,7 +35,7 @@ import JsonData from './data.json'
       
     return(
         <div>
-            <table className="table table-striped">
+            <table className="">
                 <thead>
                     <tr>
                     <th>Currency Name</th>
