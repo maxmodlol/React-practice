@@ -1,10 +1,14 @@
 import axios from 'axios';
 
+ export default function app (url,headers) {
+
+
 const app = axios.create({
-    headers: {  
-        'Content-Type': 'application/json'
-      }
+  baseURL:url,
+  headers
 
 })
-
-export default app;
+return (
+app.get(url)
+)
+ }
