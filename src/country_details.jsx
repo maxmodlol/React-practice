@@ -22,10 +22,13 @@ export default function Details() {
     const [flag, setFlag] = useState([]);
     const url_country ="http://country.io/";
     const url_flag="https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/by-code.json"
+    const header = {
+        'Content-Type': 'application/json'
+        };
     
 
     useEffect(() => {
-        app.get(url_country+`capital.json`)
+        app(url_country+`capital.json`,header)
             .then(res => {
                 let my_data = eval(res.data);
                 setCapital(my_data);
@@ -36,7 +39,7 @@ export default function Details() {
 
 
             });
-        app.get(url_country+`phone.json`)
+        app(url_country+`phone.json`,header)
             .then(res => {
                 let my_data2 = eval(res.data);
                 setPhonecode(my_data2);
@@ -47,7 +50,7 @@ export default function Details() {
 
 
             });
-        app.get(url_country+`currency.json`)
+        app(url_country+`currency.json`,header)
             .then(res => {
                 let my_data3 = eval(res.data);
                 setCurrency(my_data3);
@@ -58,7 +61,7 @@ export default function Details() {
 
 
             });
-        axios.get(url_flag)
+        app(url_flag,header)
             .then(res => {
                 let my_data4 = eval(res.data);
                 setFlag(my_data4);

@@ -13,6 +13,9 @@ export default function Country_Table() {
   const [searched, setSearched] = useState("");
   let navigate = useNavigate();
   const url = "https://gist.githubusercontent.com/keeguon/2310008/raw/bdc2ce1c1e3f28f9cab5b4393c7549f38361be4e/countries.json";
+  const header = {
+    'Content-Type': 'application/json'
+    };
 
 
   let timeout;
@@ -43,7 +46,7 @@ export default function Country_Table() {
 
 
   useEffect(() => {
-    app.get(url)
+    app(url,header)
       .then(res => {
         let my_data = res.data;
         var obj = eval(res.data);
