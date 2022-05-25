@@ -4,7 +4,8 @@ import { useState, useCallback } from 'react';
 import SearchBar from "material-ui-search-bar";
 import debounce from 'lodash.debounce'
 import { useNavigate } from "react-router-dom";
-import  app  from './utils/axios-configure'
+import  app  from './utils/axios-configure';
+import {axios} from 'axios';
 
 
 export default function Country_Table() {
@@ -12,10 +13,8 @@ export default function Country_Table() {
   var [searchfilter, setSearchfilter] = useState([]);
   const [searched, setSearched] = useState("");
   let navigate = useNavigate();
+  
   const url = "https://gist.githubusercontent.com/keeguon/2310008/raw/bdc2ce1c1e3f28f9cab5b4393c7549f38361be4e/countries.json";
-  const header = {
-    'Content-Type': 'application/json'
-    };
 
 
   let timeout;
@@ -46,7 +45,7 @@ export default function Country_Table() {
 
 
   useEffect(() => {
-    app(url,header)
+    axios.get(url)
       .then(res => {
         let my_data = res.data;
         var obj = eval(res.data);
