@@ -2,10 +2,11 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { createSearchParams, useSearchParams } from "react-router-dom";
 import { useParams } from 'react-router-dom'
-import app from './utils/axios-configure'
+import get from './utils/axios-configure'
 import axios from 'axios'
 import { margin, style, width } from "@mui/system";
 import TinyFlag from "tiny-flag";
+import {url_flag,url_country} from "./utils/const"
 
 
 
@@ -16,64 +17,41 @@ export default function Details() {
     // const getcode=searchParams.get("code");
     const queryParams = new URLSearchParams(window.location.search);
     const { code } = useParams();
-    const [capital, setCapital] = useState([]);
-    const [phonecode, setPhonecode] = useState([]);
-    const [currency, setCurrency] = useState([]);
-    const [flag, setFlag] = useState([]);
-    const url_country ="http://country.io/";
-    const url_flag="https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/by-code.json"
+    const [capitals, setCapital] = useState([]);
+    const [phonecodes, setPhonecode] = useState([]);
+    const [currencys, setCurrency] = useState([]);
+    const [flags, setFlag] = useState([]);
+
     const header = {
         'Content-Type': 'application/json'
-        };
-    
+    };
+
 
     useEffect(() => {
-        app(url_country+`capital.json`,header)
-            .then(res => {
-                let my_data = eval(res.data);
-                setCapital(my_data);
-            },
-            )
-            .catch(err => {
-                console.log(err);
+        async function question() {
+            const [capital_response, phonecode_response, currencys_response, flags_response] = await Promise.all(
+                [get(url_country + `capital.json`, header),
+                get(url_country + `phone.json`, header),
+                get(url_country + `currency.json`, header),
+                get(url_flag, header)
+                ]).then(values => {
+                    setCapital(values[0].data);
+                    setPhonecode(values[1].data);
+                    setCurrency(values[2].data);
+                    setFlag(values[3].data);
+
+                }
+                )
+                .catch(err => {
+                    console.log(err);
 
 
-            });
-        app(url_country+`phone.json`,header)
-            .then(res => {
-                let my_data2 = eval(res.data);
-                setPhonecode(my_data2);
-            },
-            )
-            .catch(err => {
-                console.log(err);
+                });
+        }
+        question();
 
 
-            });
-        app(url_country+`currency.json`,header)
-            .then(res => {
-                let my_data3 = eval(res.data);
-                setCurrency(my_data3);
-            },
-            )
-            .catch(err => {
-                console.log(err);
-
-
-            });
-        app(url_flag,header)
-            .then(res => {
-                let my_data4 = eval(res.data);
-                setFlag(my_data4);
-            },
-            )
-            .catch(err => {
-                console.log(err);
-
-
-            });
     }, []);
-
 
 
 
@@ -82,38 +60,41 @@ export default function Details() {
         <div>
             <div className="container">
                 <table style={{ width: '80%', margin: 100 }}>
-                    <thead>
-                        <tr>
+
+                    {capitals &&
+                        <tr key={code} >
                             <th>Capital</th>
-                            <th>Currency</th>
-                            <th>Phone Code</th>
-                            <th>Flag</th>
+                            <td>{capitals[Object.keys(capitals).find(item => item === code)]}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {capital && Object.keys(capital).filter(item => item === code).map(filterd =>
-                            <tr key={capital[filterd]} >
-                                <td>{capital[filterd]}</td>
-
-                                {currency && Object.keys(currency).filter(item => item === code).map(filterd =>
-
-                                    <td>{currency[filterd]}</td>
+                    }
+                    {currencys &&
+                        <tr key={code} >
+                            <th>Currency</th>
 
 
-                                )}
-                                {phonecode && Object.keys(phonecode).filter(item => item === code).map(filterd =>
-                                    <td>{phonecode[filterd]}</td>
-                                )}
-                                {flag && Object.keys(flag).filter(item => item === code).map(filterd =>
-                                    <td>
-                                        <img src={flag[filterd].image} style={{height:25,width:25}} alt="React Logo" />
-                                    </td>
-                                )}
+                            <td>{currencys[Object.keys(currencys).find(item => item === code)]}</td>
+                        </tr>
+
+                    }
+
+                    {phonecodes &&
+                        <tr key={code} >
+
+                            <th> Phone Code</th>
+                            <td>{phonecodes[Object.keys(phonecodes).find(item => item === code)]}</td>
+                        </tr>
+                    }
+                    {flags &&
+
+
+                        Object.keys(flags).filter(item => item === code).map(filterd =>
+                            <tr key={code} >
+                                <th>Flag</th>
+                                <td>
+                                    <img src={flags[filterd].image} style={{ height: 25, width: 25 }} alt="React Logo" />
+                                </td>
                             </tr>
-
                         )}
-
-                    </tbody>
                 </table>
             </div>
         </div>
