@@ -28,17 +28,17 @@ export default function Country_Table() {
       return row.name.toLowerCase().includes(searchVal.toLowerCase());
     }));
   },
-    500);
+    timeout);
 
   const cancelSearch = () => {
     setSearched("");
     setRows(searchfilter);
 
   }
-  const handleTimeoutSearch =useCallback((searchVal) => timeout = setTimeout(() => {
-    clearTimeout(timeout);
+  const handleTimeoutSearch =useCallback((searchVal) =>  setTimeout(() => {
+    clearTimeout(searchVal);
     handleDebounce(searchVal);
-  }, 1000))
+  }, timeout))
  
 
 
