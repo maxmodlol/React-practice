@@ -5,7 +5,9 @@ import Country_detail from './country_details'
 import {
   BrowserRouter as Router,
   Routes,
-  Route,} from "react-router-dom";
+  Route,
+}
+  from "react-router-dom";
 
 
 
@@ -16,8 +18,8 @@ function App() {
       <h1> Table </h1>
       <Router>
         <Routes>
-          <Route  path="/" element={<Table_Display/>} />
-          <Route  path="/details/:code" element={<Country_detail/>} />
+          <Route path="/" element={<Table_Display />} />
+          <Route path="/details/:code" element={<Country_detail />} />
         </Routes>
       </Router>
     </div>

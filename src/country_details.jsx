@@ -6,7 +6,7 @@ import get from './utils/axios-configure'
 import axios from 'axios'
 import { margin, style, width } from "@mui/system";
 import TinyFlag from "tiny-flag";
-import {url_flag,url_country} from "./utils/const"
+import { URL_FLAG, URL_COUNTRY } from "./utils/const"
 
 
 
@@ -30,10 +30,10 @@ export default function Details() {
     useEffect(() => {
         async function question() {
             const [capital_response, phonecode_response, currencys_response, flags_response] = await Promise.all(
-                [get(url_country + `capital.json`, header),
-                get(url_country + `phone.json`, header),
-                get(url_country + `currency.json`, header),
-                get(url_flag, header)
+                [get(URL_COUNTRY + `capital.json`, header),
+                get(URL_COUNTRY + `phone.json`, header),
+                get(URL_COUNTRY + `currency.json`, header),
+                get(URL_FLAG, header)
                 ]).then(values => {
                     setCapital(values[0].data);
                     setPhonecode(values[1].data);
