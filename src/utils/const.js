@@ -3,4 +3,7 @@
  export let TIMEOUT=1000;
  export const URL_COUNTRY = "http://country.io/";
 export const URL_FLAG = "https://cdn.jsdelivr.net/npm/country-flag-emoji-json@2.0.0/dist/by-code.json"
+export const HEADER_CONFG = {
+    'Content-Type': 'application/json'
+};
 

@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce'
 import { useNavigate } from "react-router-dom";
 import app from './utils/axios-configure';
 import axios from 'axios';
-import { URL, TIMEOUT } from './utils/const'
+import { URL, TIMEOUT, HEADER_CONFG } from './utils/const'
 
 
 export default function Country_Table() {
@@ -35,16 +35,15 @@ export default function Country_Table() {
     setRows(searchfilter);
 
   }
-  const handleTimeoutSearch = useCallback((searchVal) => setTimeout(() => {
-    clearTimeout(searchVal);
-    handleDebounce(searchVal);
-  }, TIMEOUE))
-
+  const handleTimeoutSearch = useCallback(
+    (searchVal) => {
+      handleDebounce(searchVal);
+    }, [rows]);
 
 
 
   useEffect(() => {
-    axios.get(URL)
+    app(URL, HEADER_CONFG)
       .then(res => {
         let my_data = res.data;
         var obj = eval(res.data);
@@ -66,6 +65,7 @@ export default function Country_Table() {
     });
 
   }
+
 
 
   return (

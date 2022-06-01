@@ -6,7 +6,7 @@ import get from './utils/axios-configure'
 import axios from 'axios'
 import { margin, style, width } from "@mui/system";
 import TinyFlag from "tiny-flag";
-import { URL_FLAG, URL_COUNTRY } from "./utils/const"
+import { URL_FLAG, URL_COUNTRY, HEADER_CONFG } from "./utils/const"
 
 
 
@@ -20,81 +20,95 @@ export default function Details() {
     const [capitals, setCapital] = useState([]);
     const [phonecodes, setPhonecode] = useState([]);
     const [currencys, setCurrency] = useState([]);
-    const [flags, setFlag] = useState([]);
+    let [flags, setFlag] = useState([]);
 
-    const header = {
-        'Content-Type': 'application/json'
-    };
 
+    const getCapitalsList = ()=>  {
+      
+     return   get(URL_COUNTRY + `capital.json`, HEADER_CONFG)
+      
+
+
+    }
+    const getPhonePrefixList = () => {
+         return get(URL_COUNTRY + `phone.json`, HEADER_CONFG)
+
+    }
+
+    const getCurrenciesList = () => {
+    return    get(URL_COUNTRY + `currency.json`, HEADER_CONFG)
+    }
+
+    const getFlagsList = () => {
+         return get(URL_FLAG, HEADER_CONFG)
+
+    }
 
     useEffect(() => {
         async function question() {
             const [capital_response, phonecode_response, currencys_response, flags_response] = await Promise.all(
-                [get(URL_COUNTRY + `capital.json`, header),
-                get(URL_COUNTRY + `phone.json`, header),
-                get(URL_COUNTRY + `currency.json`, header),
-                get(URL_FLAG, header)
-                ]).then(values => {
-                    setCapital(values[0].data);
-                    setPhonecode(values[1].data);
-                    setCurrency(values[2].data);
-                    setFlag(values[3].data);
-
-                }
-                )
-                .catch(err => {
-                    console.log(err);
+                [getCapitalsList(),
+                getPhonePrefixList(),
+                getCurrenciesList(), 
+                getFlagsList()
 
 
-                });
+                ]);
+            setCapital(capital_response.data);
+            setPhonecode(phonecode_response.data);
+            setCurrency(currencys_response.data);
+            setFlag(flags_response.data);
         }
         question();
 
 
     }, []);
-
-
+    console.log(flags);
+    const findelement = (array, code) => {
+        return Object.values(array).find(item => item === code);
+    }
 
     return (
 
         <div>
             <div className="container">
                 <table style={{ width: '80%', margin: 100 }}>
-
-                    {capitals &&
-                        <tr key={code} >
-                            <th>Capital</th>
-                            <td>{capitals[Object.keys(capitals).find(item => item === code)]}</td>
-                        </tr>
-                    }
-                    {currencys &&
-                        <tr key={code} >
-                            <th>Currency</th>
-
-
-                            <td>{currencys[Object.keys(currencys).find(item => item === code)]}</td>
-                        </tr>
-
-                    }
-
-                    {phonecodes &&
-                        <tr key={code} >
-
-                            <th> Phone Code</th>
-                            <td>{phonecodes[Object.keys(phonecodes).find(item => item === code)]}</td>
-                        </tr>
-                    }
-                    {flags &&
-
-
-                        Object.keys(flags).filter(item => item === code).map(filterd =>
+                    <tbody>
+                        {capitals &&
                             <tr key={code} >
-                                <th>Flag</th>
-                                <td>
-                                    <img src={flags[filterd].image} style={{ height: 25, width: 25 }} alt="React Logo" />
-                                </td>
+                                <th>Capital</th>
+                                <td>{capitals[code]}</td>
                             </tr>
-                        )}
+                        }
+                        {currencys &&
+                            <tr >
+                                <th>Currency</th>
+
+
+                                <td>{currencys[code]}</td>
+                            </tr>
+
+                        }
+
+                        {phonecodes &&
+                            <tr key={code} >
+
+                                <th> Phone Code</th>
+                                <td>{phonecodes[code]}</td>
+                            </tr>
+                        }
+
+                        {flags &&
+                            Object.keys(flags).filter(item => item === code).map(filterd =>
+                                <tr key={code}>
+                                    <th>Flag</th>
+                                    <td>
+                                        <img src={flags[filterd].image} style={{ height: 25, width: 25 }} alt="React Logo" />
+                                    </td>
+                                </tr>
+
+                            )}
+                    </tbody>
                 </table>
             </div>
         </div>
