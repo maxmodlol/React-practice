@@ -1,50 +1,95 @@
-import React from 'react'
-import JsonData from './data.json'
-  export default function Table_Display(){
-    
-      const data =JsonData;
-      let dataArr = Array.from(data);
+import React, { useEffect } from 'react'
+import { DataGrid } from '@mui/x-data-grid';
+import { useState, useCallback } from 'react';
+import SearchBar from "material-ui-search-bar";
+import debounce from 'lodash.debounce'
+import { useNavigate } from "react-router-dom";
+import app from './utils/axios-configure';
+import axios from 'axios';
+import { URL, TIMEOUT, HEADER_CONFG } from './utils/const'
 
-   
-     
-      const DisplayData=dataArr.map((infos) =>{
-                return(
-                    infos.map((info) => {
-                        return(
-                    <tr>
-                        <td>{info.name}</td>
-                        <td>{info.iso.code}</td>
-                        <td>{info.symbol.native.display}</td>
-                    </tr>
-                        )})
-                )
-            }
-        
-        
-      );
- 
-         
-        
-      
-    return(
-        <div>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                    <th>Currency Name</th>
-                    <th>Currency Code</th>
-                    <th>Currency Display </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                    {DisplayData}
-                    
-                </tbody>
-            </table>
-             
-        </div>
-    )
- }
- 
- 
+
+export default function Country_Table() {
+  var [rows, setRows] = useState([]);
+  var [searchfilter, setSearchfilter] = useState([]);
+  const [searched, setSearched] = useState("");
+  let navigate = useNavigate();
+
+
+
+  const columns_countries = [
+    { field: 'name', headerName: 'Countrey Name', width: 350 },
+    { field: 'code', headerName: 'Countrey Code', width: 350 },
+  ];
+
+  const handleDebounce = debounce(searchVal => {
+
+    setRows(searchfilter.filter((row) => {
+      return row.name.toLowerCase().includes(searchVal.toLowerCase());
+    }));
+  },
+    TIMEOUT);
+
+  const cancelSearch = () => {
+    setSearched("");
+    setRows(searchfilter);
+
+  }
+  const handleTimeoutSearch = useCallback(
+    (searchVal) => {
+      handleDebounce(searchVal);
+    }, [rows]);
+
+
+
+  useEffect(() => {
+    app(URL, HEADER_CONFG)
+      .then(res => {
+        let my_data = res.data;
+        var obj = eval(res.data);
+
+        setRows(obj);
+        setSearchfilter(obj);
+      },
+      )
+      .catch(err => {
+        console.log(err);
+
+      });
+
+  }, [])
+  const handleOnCellClick = (param) => {
+    console.log(param.row.code);
+    navigate({
+      pathname: `/details/${param.row.code}`
+    });
+
+  }
+
+
+
+  return (
+    <div style={{ height: 400, width: '50%', marginLeft: 250 }}>
+      <SearchBar
+        value={searched}
+        onChange={(searchVal) => handleTimeoutSearch(searchVal)}
+        onCancelSearch={() => cancelSearch()}
+      />
+
+      <DataGrid
+        getRowId={(rows) => rows.name}
+        rows={rows}
+        columns={columns_countries}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
+        onCellClick={handleOnCellClick}
+
+      />
+
+
+
+    </div>
+
+  )
+}
+
