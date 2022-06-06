@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-import Table_Display from './Table'
-import Country_detail from './country_details'
+import Table_Display from './components/Table'
+import Country_detail from './components/country_details'
 import {
   BrowserRouter as Router,
   Routes,

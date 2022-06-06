@@ -1,20 +1,17 @@
-import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createSearchParams, useSearchParams } from "react-router-dom";
-import { useParams } from 'react-router-dom'
-import get from './utils/axios-configure'
-import axios from 'axios'
-import { margin, style, width } from "@mui/system";
-import TinyFlag from "tiny-flag";
-import { URL_FLAG, URL_COUNTRY, HEADER_CONFG } from "./utils/const"
+import { useParams } from 'react-router-dom';
+import get from '../utils/axios-configure';
+import { URL_FLAG, URL_COUNTRY, HEADER_CONFG } from "../utils/const"
 
 
-
+    function NotFound(){
+        return (
+            <td>Not Found</td>
+        );
+    }
 
 
 export default function Details() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    // const getcode=searchParams.get("code");
     const queryParams = new URLSearchParams(window.location.search);
     const { code } = useParams();
     const [capitals, setCapital] = useState([]);
@@ -64,23 +61,19 @@ export default function Details() {
 
     }, []);
     console.log(flags);
-    const findelement = (array, code) => {
-        return Object.values(array).find(item => item === code);
-    }
-
     return (
 
         <div>
             <div className="container">
                 <table style={{ width: '80%', margin: 100 }}>
                     <tbody>
-                        {capitals &&
+                        {capitals ?
                             <tr key={code} >
                                 <th>Capital</th>
                                 <td>{capitals[code]}</td>
                             </tr>
-                        }
-                        {currencys &&
+                       :<NotFound/> }
+                        {currencys ?
                             <tr >
                                 <th>Currency</th>
 
@@ -88,26 +81,33 @@ export default function Details() {
                                 <td>{currencys[code]}</td>
                             </tr>
 
-                        }
+                       :<NotFound/> }
 
-                        {phonecodes &&
+                        {phonecodes ?
                             <tr key={code} >
 
                                 <th> Phone Code</th>
                                 <td>{phonecodes[code]}</td>
                             </tr>
-                        }
+                       :<NotFound/> }
 
-                        {flags &&
-                            Object.keys(flags).filter(item => item === code).map(filterd =>
-                                <tr key={code}>
-                                    <th>Flag</th>
-                                    <td>
-                                        <img src={flags[filterd].image} style={{ height: 25, width: 25 }} alt="React Logo" />
-                                    </td>
-                                </tr>
+                        { flags[code] ?
+                            <tr key={code}>
+                                <th>Flag</th>
+                                <td>
+                                    <img src={flags[code].image} style={{ height: 25, width: 25 }} alt="React Logo" />
+                                </td>
+                            </tr>
+                            // Object.keys(flags).filter(item => item === code).map(filterd =>
+                            //     <tr key={code}>
+                            //         <th>Flag</th>
+                            //         <td>
+                            //             <img src={flags[code].image} style={{ height: 25, width: 25 }} alt="React Logo" />
+                            //         <m/td>
+                            //     </tr>
 
-                            )}
+                            // )
+                            :<NotFound/>}
                     </tbody>
                 </table>
             </div>
