@@ -68,11 +68,11 @@ export default function Details() {
                     <tbody>
 
                         {capitals ?
-                            <RowsDetails title="Capitals" value={capitals[code]} isImg={false}/>
+                            <RowsDetails title="Capitals" value={capitals[code]} isImg={false} />
 
                             : <NotFound />}
                         {currencys ?
-                            <RowsDetails title="Currencyes" value={currencys[code]} isImg={false}/>
+                            <RowsDetails title="Currencyes" value={currencys[code]} isImg={false} />
 
 
                             : <NotFound />}
@@ -82,9 +82,9 @@ export default function Details() {
                             : <NotFound />}
 
                         {flags[code] ?
-                            <RowsDetails title="Flags" value={flags[code].image} isImg={true}/>
+                            <RowsDetails title="Flags" value={flags[code].image} isImg={true} />
 
-                            : <NotFound />} 
+                            : <NotFound />}
                     </tbody>
                 </table>
             </div>
