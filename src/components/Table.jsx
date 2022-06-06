@@ -4,9 +4,8 @@ import { useState, useCallback } from 'react';
 import SearchBar from "material-ui-search-bar";
 import debounce from 'lodash.debounce'
 import { useNavigate } from "react-router-dom";
-import app from './utils/axios-configure';
-import axios from 'axios';
-import { URL, TIMEOUT, HEADER_CONFG } from './utils/const'
+import app from '../utils/axios-configure';
+import { URL, TIMEOUT } from '../utils/const'
 
 
 export default function Country_Table() {
@@ -43,7 +42,7 @@ export default function Country_Table() {
 
 
   useEffect(() => {
-    app(URL, HEADER_CONFG)
+    app(URL)
       .then(res => {
         let my_data = res.data;
         var obj = eval(res.data);
@@ -59,7 +58,6 @@ export default function Country_Table() {
 
   }, [])
   const handleOnCellClick = (param) => {
-    console.log(param.row.code);
     navigate({
       pathname: `/details/${param.row.code}`
     });
