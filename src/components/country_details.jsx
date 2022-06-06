@@ -2,13 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from 'react-router-dom';
 import get from '../utils/axios-configure';
 import { URL_FLAG, URL_COUNTRY, HEADER_CONFG } from "../utils/const"
+import RowsDetails from "../components/rows_details"
+import NotFound from "../components/Not_Found"
 
 
-    function NotFound(){
-        return (
-            <td>Not Found</td>
-        );
-    }
+
 
 
 export default function Details() {
@@ -20,24 +18,24 @@ export default function Details() {
     let [flags, setFlag] = useState([]);
 
 
-    const getCapitalsList = ()=>  {
-      
-     return   get(URL_COUNTRY + `capital.json`, HEADER_CONFG)
-      
+    const getCapitalsList = () => {
+
+        return get(URL_COUNTRY + `capital.json`, HEADER_CONFG)
+
 
 
     }
     const getPhonePrefixList = () => {
-         return get(URL_COUNTRY + `phone.json`, HEADER_CONFG)
+        return get(URL_COUNTRY + `phone.json`, HEADER_CONFG)
 
     }
 
     const getCurrenciesList = () => {
-    return    get(URL_COUNTRY + `currency.json`, HEADER_CONFG)
+        return get(URL_COUNTRY + `currency.json`, HEADER_CONFG)
     }
 
     const getFlagsList = () => {
-         return get(URL_FLAG, HEADER_CONFG)
+        return get(URL_FLAG, HEADER_CONFG)
 
     }
 
@@ -46,7 +44,7 @@ export default function Details() {
             const [capital_response, phonecode_response, currencys_response, flags_response] = await Promise.all(
                 [getCapitalsList(),
                 getPhonePrefixList(),
-                getCurrenciesList(), 
+                getCurrenciesList(),
                 getFlagsList()
 
 
@@ -60,54 +58,33 @@ export default function Details() {
 
 
     }, []);
-    console.log(flags);
+    console.log(currencys);
+
     return (
 
         <div>
             <div className="container">
                 <table style={{ width: '80%', margin: 100 }}>
                     <tbody>
+
                         {capitals ?
-                            <tr key={code} >
-                                <th>Capital</th>
-                                <td>{capitals[code]}</td>
-                            </tr>
-                       :<NotFound/> }
+                            <RowsDetails title="Capitals" value={capitals[code]} isImg={false}/>
+
+                            : <NotFound />}
                         {currencys ?
-                            <tr >
-                                <th>Currency</th>
+                            <RowsDetails title="Currencyes" value={currencys[code]} isImg={false}/>
 
 
-                                <td>{currencys[code]}</td>
-                            </tr>
-
-                       :<NotFound/> }
+                            : <NotFound />}
 
                         {phonecodes ?
-                            <tr key={code} >
+                            <RowsDetails title="PhoneCode" value={phonecodes[code]} isImg={false} />
+                            : <NotFound />}
 
-                                <th> Phone Code</th>
-                                <td>{phonecodes[code]}</td>
-                            </tr>
-                       :<NotFound/> }
+                        {flags[code] ?
+                            <RowsDetails title="Flags" value={flags[code].image} isImg={true}/>
 
-                        { flags[code] ?
-                            <tr key={code}>
-                                <th>Flag</th>
-                                <td>
-                                    <img src={flags[code].image} style={{ height: 25, width: 25 }} alt="React Logo" />
-                                </td>
-                            </tr>
-                            // Object.keys(flags).filter(item => item === code).map(filterd =>
-                            //     <tr key={code}>
-                            //         <th>Flag</th>
-                            //         <td>
-                            //             <img src={flags[code].image} style={{ height: 25, width: 25 }} alt="React Logo" />
-                            //         <m/td>
-                            //     </tr>
-
-                            // )
-                            :<NotFound/>}
+                            : <NotFound />} 
                     </tbody>
                 </table>
             </div>
